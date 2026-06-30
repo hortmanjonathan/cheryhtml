@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chery Argentina</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800;1,900&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --chery-accent: #A89076;
+      --chery-accent2: #856B4E;
+      --chery-accent3: #645E59;
+      --chery-dark: #1a1714;
+      --chery-mid: #221e1a;
+      --chery-gray: #7a7470;
+      --chery-light: #c8bfb5;
+      --chery-white: #ffffff;
+      --nav-height: 56px;
+      /* reducido de 72px */
+      --chat-width: 360px;
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: 'Barlow', sans-serif;
+      background: var(--chery-dark);
+      color: var(--chery-white);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVBAR ──────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      background: #DAD9D7;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .nav-logo img {
+      height: 22px;
+      /* ligeramente reducido */
+      width: auto;
+      display: block;
+    }
+
+    /* ─── BACKGROUND HERO ─────────────────────────────────── */
+    .bg-wrap {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .bg-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: blur(1px) brightness(0.65);
+      transform: scale(1.02);
+    }
+
+    .bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+          rgba(0, 0, 0, 0.45) 0%,
+          rgba(20, 15, 10, 0.22) 60%,
+          rgba(0, 0, 0, 0.52) 100%);
+    }
+
+    /* ─── PAGE CONTENT ────────────────────────────────────── */
+    .page-content {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding-top: var(--nav-height);
+      padding-right: var(--chat-width);
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: calc(100vh - var(--nav-height));
+      padding: 64px 72px;
+      max-width: 760px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--chery-accent);
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(52px, 7vw, 96px);
+      font-weight: 900;
+      line-height: 0.93;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      color: var(--chery-white);
+      margin-bottom: 24px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--chery-accent);
+    }
+
+    .hero-subtitle {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.65;
+      max-width: 460px;
+      margin-bottom: 44px;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--chery-accent);
+      color: #fff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 34px;
+      transition: background 0.2s;
+    }
+
+    .hero-cta:hover {
+      background: var(--chery-accent2);
+    }
+
+    /* ─── FIXED CHAT PANEL ────────────────────────────────── */
+    .chat-panel {
+      position: fixed;
+      top: var(--nav-height);
+      right: 0;
+      bottom: 0;
+      width: var(--chat-width);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      background: rgba(22, 18, 14, 0.52);
+      /* más transparente: era 0.72 */
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-left: 1px solid rgba(168, 144, 118, 0.18);
+    }
+
+    /* Header del chat */
+    .chat-header {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 22px;
+      border-bottom: 1px solid rgba(168, 144, 118, 0.14);
+      background: rgba(133, 107, 78, 0.18);
+    }
+
+    .chat-header-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--chery-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .chat-header-avatar svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+    }
+
+    .chat-header-info h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--chery-white);
+      line-height: 1.2;
+    }
+
+    .chat-header-info p {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 2px;
+    }
+
+    .chat-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #a8c084;
+      flex-shrink: 0;
+      margin-left: auto;
+      box-shadow: 0 0 6px rgba(168, 192, 132, 0.55);
+    }
+
+    /* Área de mensajes */
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(168, 144, 118, 0.15) transparent;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: rgba(168, 144, 118, 0.15);
+      border-radius: 4px;
+    }
+
+    /* Burbujas */
+    .msg {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 86%;
+    }
+
+    .msg.bot {
+      align-self: flex-start;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+    }
+
+    .msg-bubble {
+      padding: 11px 15px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      font-weight: 400;
+    }
+
+    .msg.bot .msg-bubble {
+      background: rgba(168, 144, 118, 0.1);
+      border: 1px solid rgba(168, 144, 118, 0.2);
+      color: rgba(255, 255, 255, 0.88);
+      border-radius: 2px 12px 12px 12px;
+    }
+
+    .msg.user .msg-bubble {
+      background: var(--chery-accent);
+      color: #fff;
+      border-radius: 12px 2px 12px 12px;
+    }
+
+    .msg-time {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.25);
+      padding: 0 4px;
+    }
+
+    .msg.user .msg-time {
+      text-align: right;
+    }
+
+    /* Barra de entrada */
+    .chat-input-area {
+      flex-shrink: 0;
+      padding: 14px 18px 18px;
+      border-top: 1px solid rgba(168, 144, 118, 0.1);
+    }
+
+    .chat-input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(168, 144, 118, 0.07);
+      border: 1px solid rgba(168, 144, 118, 0.18);
+      border-radius: 4px;
+      padding: 10px 14px;
+      transition: border-color 0.2s;
+    }
+
+    .chat-input-row:focus-within {
+      border-color: rgba(168, 144, 118, 0.55);
+    }
+
+    .chat-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'Barlow', sans-serif;
+      font-size: 13.5px;
+      color: var(--chery-white);
+      resize: none;
+      line-height: 1.4;
+    }
+
+    .chat-input::placeholder {
+      color: rgba(255, 255, 255, 0.28);
+    }
+
+    .chat-send-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--chery-accent);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .chat-send-btn:hover {
+      background: var(--chery-accent2);
+      transform: scale(1.08);
+    }
+
+    .chat-send-btn:active {
+      transform: scale(0.95);
+    }
+
+    .chat-send-btn svg {
+      width: 15px;
+      height: 15px;
+      fill: #fff;
+      transform: translateX(1px);
+    }
+
+    .chat-disclaimer {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.2);
+      text-align: center;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    /* typing indicator */
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 4px 2px;
+    }
+
+    .typing-indicator span {
+      width: 6px;
+      height: 6px;
+      background: rgba(168, 144, 118, 0.5);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      80%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.4;
+      }
+
+      40% {
+        transform: translateY(-5px);
+        opacity: 1;
+      }
+    }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      :root {
+        --chat-width: 100%;
+      }
+
+      .page-content {
+        padding-right: 0;
+      }
+
+      .chat-panel {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 50vh;
+        border-left: none;
+        border-top: 1px solid rgba(168, 144, 118, 0.15);
+      }
+
+      .hero {
+        padding: 40px 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── BACKGROUND ── -->
+  <div class="bg-wrap">
+    <img src="cherybg.jpg" alt="Chery background" />
+    <div class="bg-overlay"></div>
+  </div>
+
+  <!-- ── NAVBAR ── -->
+  <nav>
+    <a class="nav-logo" href="https://chery.com.ar/">
+      <img src="https://chery.com.ar/wp-content/uploads/2025/06/Capa_1-1.png" alt="Chery Argentina"
+        onerror="this.onerror=null;this.src='';this.style.display='none';this.parentElement.innerHTML='<span style=\'font-family:Barlow Condensed,sans-serif;font-size:24px;font-weight:900;letter-spacing:0.12em;color:#fff;\'>CHERY</span>'" />
+    </a>
+  </nav>
+
+  <!-- ── CHATBOT PANEL ── -->
+  <aside class="chat-panel" id="chatPanel">
+
+    <div class="chat-header">
+      <div class="chat-header-avatar">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-2 10H6v-2h12v2zm0-4H6V6h12v2z" />
+        </svg>
+      </div>
+      <div class="chat-header-info">
+        <h3>Chery Asistente</h3>
+      </div>
+      <div class="chat-status-dot"></div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg bot">
+        <div class="msg-bubble">
+          ¡Hola! Soy el asistente virtual de <strong>Chery Argentina</strong>. ¿En qué puedo ayudarte hoy?
+        </div>
+        <span class="msg-time">Ahora</span>
+      </div>
+      <div class="msg bot">
+        <div class="msg-bubble">
+          Puedo orientarte sobre modelos, financiación, concesionarios o agendar un test drive. 🚗
+        </div>
+        <span class="msg-time">Ahora</span>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chatInput" placeholder="Escribí tu consulta..." rows="1"
+          onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="chat-send-btn" onclick="sendMessage()" title="Enviar">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+  </aside>
+
+  <script>
+    const messagesEl = document.getElementById('chatMessages');
+    const inputEl = document.getElementById('chatInput');
+
+    function getTime() {
+      return new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function appendMsg(text, role) {
+      const wrap = document.createElement('div');
+      wrap.className = `msg ${role}`;
+
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+      bubble.innerHTML = text;
+
+      const time = document.createElement('span');
+      time.className = 'msg-time';
+      time.textContent = getTime();
+
+      wrap.appendChild(bubble);
+      wrap.appendChild(time);
+      messagesEl.appendChild(wrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      return wrap;
+    }
+
+    function showTyping() {
+      const wrap = document.createElement('div');
+      wrap.className = 'msg bot';
+      wrap.id = 'typingIndicator';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'msg-bubble';
+      bubble.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+
+      wrap.appendChild(bubble);
+      messagesEl.appendChild(wrap);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function removeTyping() {
+      const el = document.getElementById('typingIndicator');
+      if (el) el.remove();
+    }
+
+    function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      appendMsg(text, 'user');
+      inputEl.value = '';
+      inputEl.style.height = 'auto';
+
+      showTyping();
+      setTimeout(() => {
+        removeTyping();
+        appendMsg(
+          '<em>Función de respuesta automática pendiente de integración.</em>',
+          'bot'
+        );
+      }, 1200);
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = Math.min(el.scrollHeight, 96) + 'px';
+    }
+  </script>
+
+</body>
+
+</html>
